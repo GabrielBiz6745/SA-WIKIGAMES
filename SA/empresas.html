@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Empresas de Jogos</title>
+    <link rel="shortcut icon" type="image/x-icon" href="icon.jpg">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #121212;
+            color: #f5f5f5;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background-color: #1f1f1f;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid #ff3c3c;
+        }
+
+        header h1 {
+            margin: 0;
+            color: #ff3c3c;
+            font-size: 26px;
+            letter-spacing: 1px;
+        }
+
+        header nav button {
+            margin-left: 10px;
+            padding: 8px 15px;
+            border: none;
+            border-radius: 5px;
+            background-color: #ff3c3c;
+            color: #fff;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        header nav button:hover {
+            background-color: #ff6565;
+        }
+
+        .company-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            padding: 20px;
+            justify-content: center;
+        }
+
+        .company-card {
+            background-color: #1f1f1f;
+            border-radius: 10px;
+            padding: 15px;
+            width: calc(15% - 10px);
+            text-align: center;
+            box-shadow: 0 0 10px rgba(255, 60, 60, 0.3);
+            cursor: pointer;
+            transition: transform 0.2s;
+            min-width: 160px;
+        }
+
+        .company-card:hover {
+            transform: scale(1.05);
+        }
+
+        .company-card img {
+            width: 100%;
+            height: auto;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+
+        /* Modal */
+        #companyModal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.85);
+            justify-content: center;
+            align-items: center;
+            z-index: 10;
+            overflow-y: auto;
+            padding: 10px;
+        }
+
+        /* Conteúdo da modal */
+        #companyModalContent {
+            background: #111;
+            width: 100%;
+            max-width: 600px;
+            max-height: 90vh;
+            border-radius: 14px;
+            padding: 15px;
+            position: relative;
+            color: #eee;
+            box-shadow: 0 8px 30px rgba(255, 60, 60, 0.5);
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+        }
+
+        /* Imagem */
+        #companyModalContent img {
+            width: 100%;
+            height: auto;
+            max-height: calc(50vh - 10px);
+            object-fit: contain;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            border: 2px solid #ff3c3c;
+            display: block;
+            box-sizing: border-box;
+        }
+
+        /* Botão fechar */
+        #closeModal {
+            float: right;
+            cursor: pointer;
+            font-size: 22px;
+            color: #ff3c3c;
+            font-weight: bold;
+            transition: color 0.2s;
+        }
+
+        #closeModal:hover {
+            color: #ff7777;
+        }
+
+        /* ================================ */
+        /* Barra de rolagem personalizada   */
+        /* ================================ */
+        #companyModalContent::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        #companyModalContent::-webkit-scrollbar-track {
+            background: #1a1a1a;
+            border-radius: 10px;
+        }
+
+        #companyModalContent::-webkit-scrollbar-thumb {
+            background: #ff3c3c;
+            border-radius: 10px;
+        }
+
+        #companyModalContent::-webkit-scrollbar-thumb:hover {
+            background: #ff6b6b;
+        }
+
+        /* Suporte para Firefox */
+        #companyModalContent {
+            scrollbar-width: thin;
+            scrollbar-color: #ff3c3c #1a1a1a;
+            /* thumb | track */
+        }
+
+
+        .company-details {
+            margin-bottom: 10px;
+        }
+
+        .company-details strong {
+            color: #ff3c3c;
+        }
+
+        ul.game-list {
+            padding-left: 20px;
+            margin: 5px 0;
+        }
+
+        a.company-link {
+            color: #ff3c3c;
+            text-decoration: none;
+        }
+
+        a.company-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+        <h1>Empresas de Jogos</h1>
+        <nav>
+            <button onclick="window.location.href='index.html'">Catálogo de Jogos</button>
+            <button onclick="window.location.href='empresas.html'">Empresas de Jogos</button>
+            <button onclick="window.location.href='noticias.html'">Notícias</button>
+        </nav>
+    </header>
+
+    <main>
+        <div class="company-list" id="companyList">
+            <!-- Empresas serão adicionadas aqui via JS -->
+        </div>
+    </main>
+
+    <!-- Modal -->
+    <div id="companyModal">
+        <div id="companyModalContent">
+            <span id="closeModal">&times;</span>
+            <img id="modalLogo" src="" alt="">
+            <h2 id="modalName"></h2>
+            <div class="company-details"><strong>Descrição:</strong> <span id="modalDesc"></span></div>
+            <div class="company-details"><strong>Ano de fundação:</strong> <span id="modalFounded"></span></div>
+            <div class="company-details"><strong>País de origem:</strong> <span id="modalCountry"></span></div>
+            <div class="company-details"><strong>Principais prêmios:</strong> <span id="modalAwards"></span></div>
+            <div class="company-details"><strong>Site oficial:</strong> <a href="#" id="modalWebsite"
+                    class="company-link" target="_blank"></a></div>
+            <div class="company-details"><strong>Jogos lançados:</strong>
+                <ul class="game-list" id="modalGames"></ul>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const companies = [
+            {
+                name: 'FromSoftware',
+                logo: 'CAPAS/fromsoftware.jpg',
+                description: 'Criadora de Dark Souls, Bloodborne e Elden Ring.',
+                founded: '1986',
+                country: 'Japão',
+                awards: 'Jogo do Ano 2011 (Dark Souls), Melhor RPG 2022 (Elden Ring)',
+                website: 'https://www.fromsoftware.jp/',
+                games: ['Dark Souls III', 'Bloodborne', 'Elden Ring', 'Sekiro: Shadows Die Twice', 'Demon\'s Souls Remake', 'Dark Souls II', 'Dark Souls', 'Armored Core VI: Fires of Rubicon']
+            },
+            {
+                name: 'CD Projekt Red',
+                logo: 'CAPAS/cdprojekt.jpg',
+                description: 'Criadora de The Witcher 3 e Cyberpunk 2077.',
+                founded: '2002',
+                country: 'Polônia',
+                awards: 'Jogo do Ano 2015 (The Witcher 3)',
+                website: 'https://en.cdprojektred.com/',
+                games: ['The Witcher 3: Wild Hunt', 'Cyberpunk 2077', 'The Witcher 2: Assassins of Kings', 'Gwent: The Witcher Card Game', 'The Witcher']
+            },
+            {
+                name: 'Nintendo',
+                logo: 'CAPAS/nintendo.jpg',
+                description: 'Criadora de Zelda, Mario e Pokémon.',
+                founded: '1889',
+                country: 'Japão',
+                awards: 'Empresa do Ano 2017, Prêmios de Inovação em Jogos',
+                website: 'https://www.nintendo.com/',
+                games: ['The Legend of Zelda: Breath of the Wild', 'Mario Odyssey', 'Pokémon Scarlet', 'Pokémon Violet', 'Animal Crossing: New Horizons', 'Super Smash Bros. Ultimate']
+            },
+            {
+                name: 'Capcom',
+                logo: 'CAPAS/capcom.jpg',
+                description: 'Criadora de Resident Evil, Monster Hunter e Devil May Cry.',
+                founded: '1979',
+                country: 'Japão',
+                awards: 'Melhor Desenvolvedora 2005-2020',
+                website: 'https://www.capcom.com/',
+                games: ['Resident Evil 4 Remake', 'Monster Hunter Rise', 'Devil May Cry 5', 'Street Fighter V', 'Megaman', 'Resident Evil 2 Remake', 'Resident Evil 3 Remake', 'Resident Evil Village', 'Devil May Cry 4 Special Edition']
+            },
+            {
+                name: 'Santa Monica Studio',
+                logo: 'CAPAS/santamonica.jpg',
+                description: 'Criadora de God of War.',
+                founded: '1999',
+                country: 'Estados Unidos',
+                awards: 'Jogo do Ano 2018 (God of War)',
+                website: 'https://sms.playstation.com/',
+                games: ['God of War', 'God of War Ragnarok', 'God of War III', 'God of War II', 'God of War: Ascension', 'God of War: Chains of Olympus', 'God of War: Ghost of Sparta']
+            },
+            {
+                name: 'Epic Games',
+                logo: 'CAPAS/epic.jpg',
+                description: 'Criadora de Fortnite e Unreal Engine.',
+                founded: '1991',
+                country: 'Estados Unidos',
+                awards: 'Melhor Jogo Mobile 2018 (Fortnite)',
+                website: 'https://www.epicgames.com/',
+                games: ['Fortnite', 'Unreal Tournament', 'Gears of War', 'Infinity Blade', 'Shadow Complex', 'Robo Recall']
+            },
+            {
+                name: 'Ubisoft',
+                logo: 'CAPAS/Captura de tela 2025-10-18 205151.png',
+                description: 'Criadora de Assassin\'s Creed e Far Cry.',
+                founded: '1986',
+                country: 'França',
+                awards: 'Melhor Trilha Sonora para Jogos e Troféu Gameworld 2013',
+                website: 'https://www.ubisoft.com/',
+                games: ['The Division 2', 'Assassin\'s Creed Valhalla', 'Far Cry 6', 'Watch Dogs: Legion', 'Rainbow Six Siege', 'Ghost Recon Breakpoint', 'Assassin\'s Creed Odyssey', 'For Honor', 'Just Dance 2021', 'The Crew 2']
+            },
+            {
+                name: 'Bethesda Game Studios',
+                logo: 'CAPAS/Captura de tela 2025-10-18 205550.png',
+                description: 'Criadora da saga The Elder Scrolls e Fallout.',
+                founded: '2001',
+                country: 'Estados Unidos',
+                awards: 'The Game Awards 2011 - Melhor RPG (The Elder Scrolls V: Skyrim)',
+                website: 'https://bethesdagamestudios.com/',
+                games: ['The Elder Scrolls V: Skyrim', 'Fallout 4', 'Fallout 76', 'The Elder Scrolls Online', 'The Elder Scrolls IV: Oblivion', 'Fallout 3', 'The Elder Scrolls III: Morrowind', 'The Elder Scrolls II: Daggerfall']
+            },
+            {
+                name: 'Rockstar Games',
+                logo: 'CAPAS/Captura de tela 2025-10-18 212035.png',
+                description: 'Desenvolvedora conhecida por jogos de mundo aberto e narrativas intensas.',
+                founded: '1984',
+                country: 'Estados Unidos',
+                awards: 'Game of the Year, Melhor Narrativa',
+                website: 'https://www.rockstargames.com/',
+                games: ['Grand Theft Auto V', 'Red Dead Redemption 2', 'Bully', 'Max Payne 3', 'L.A. Noire', 'Grand Theft Auto IV', 'Red Dead Redemption', 'Midnight Club: Los Angeles', 'Manhunt 2', 'The Warriors']
+            },
+            {
+                name: 'Valve Corporation',
+                logo: 'CAPAS/valve.jpg',
+                description: 'Famosa por criar o Steam e franquias icônicas de PC.',
+                founded: '1996',
+                country: 'Estados Unidos',
+                awards: 'Prêmios de inovação, melhor plataforma digital',
+                website: 'https://www.valvesoftware.com/',
+                games: ['Half-Life', 'Portal', 'Dota 2', 'Counter-Strike: Global Offensive', 'Left 4 Dead 2', 'Team Fortress 2', 'Half-Life 2', 'Portal 2', 'Counter-Strike', 'Left 4 Dead', 'Day of Defeat']
+            },
+            {
+                name: 'Square Enix',
+                logo: 'CAPAS/Square.jpg',
+                description: 'Empresa japonesa especializada em RPGs e jogos de fantasia.',
+                founded: '2003',
+                country: 'Japão',
+                awards: 'Melhor RPG, Melhor Direção de Arte',
+                website: 'https://www.square-enix.com/',
+                games: ['Final Fantasy VII Remake', 'Kingdom Hearts III', 'Dragon Quest XI', 'NieR: Automata', 'Final Fantasy XV', 'Tomb Raider', 'Deus Ex: Mankind Divided', 'Octopath Traveler', 'Bravely Default II', 'Life is Strange']
+            },
+            {
+                name: 'Bandai Namco',
+                logo: 'CAPAS/Bandai.jpg',
+                description: 'Desenvolvedora de jogos variados, incluindo franquias de anime e arcade.',
+                founded: '2006',
+                country: 'Japão',
+                awards: 'Melhor Jogo de Luta, Melhor Multiplayer',
+                website: 'https://www.bandainamcoent.com/',
+                games: ['Tekken 7', 'Dark Souls III', 'Pac-Man', 'Dragon Ball FighterZ', 'Soulcalibur VI', 'Naruto Shippuden: Ultimate Ninja Storm 4', 'Tales of Arise', 'Ace Combat 7: Skies Unknown', 'Jump Force', 'Little Nightmares II']
+            },
+            {
+                name: 'Blizzard Entertainment',
+                logo: 'CAPAS/Blizzard.jpg',
+                description: 'Criadora de alguns dos maiores sucessos online e competitivos.',
+                founded: '1991',
+                country: 'Estados Unidos',
+                awards: 'Melhor MMO, Game of the Year',
+                website: 'https://www.blizzard.com/',
+                games: ['World of Warcraft', 'Overwatch', 'Diablo III', 'Hearthstone', 'StarCraft II', 'Heroes of the Storm', 'Diablo II', 'Warcraft III']
+            },
+            {
+                name: 'SEGA',
+                logo: 'CAPAS/sega.jpg',
+                description: 'Empresa japonesa conhecida por Sonic e jogos de arcade clássicos.',
+                founded: '1960',
+                country: 'Japão',
+                awards: 'Melhor Jogo Clássico, Melhor Franchising',
+                website: 'https://www.sega.com/',
+                games: ['Sonic the Hedgehog', 'Yakuza', 'Total War', 'Persona 5', 'Phantasy Star Online 2', 'Football Manager', 'Virtua Fighter', 'Bayonetta', 'Shinobi']
+            },
+            {
+                name: 'EA Games',
+                logo: 'CAPAS/ea_games_logo.jpg',
+                description: 'Uma das maiores publishers de jogos do mundo, conhecida por esportes, simuladores e franquias icônicas.',
+                founded: '1982',
+                country: 'Estados Unidos',
+                awards: 'Melhor Franchising, Melhor Jogo Esportivo, Game of the Year',
+                website: 'https://www.ea.com/',
+                games: ['FIFA 23', 'Battlefield 6', 'The Sims 4', 'Madden NFL 23', 'Apex Legends', 'Need for Speed Heat', 'Star Wars Jedi: Fallen Order', 'Dragon Age: Inquisition']
+            }
+
+        ];
+
+        const companyList = document.getElementById('companyList');
+        const modal = document.getElementById('companyModal');
+        const closeModal = document.getElementById('closeModal');
+
+        companies.forEach((company, index) => {
+            const card = document.createElement('div');
+            card.className = 'company-card';
+            card.innerHTML = `
+            <img src="${company.logo}" alt="${company.name}">
+            <h3>${company.name}</h3>
+            <p>${company.description}</p>
+        `;
+            card.addEventListener('click', () => openModal(index));
+            companyList.appendChild(card);
+        });
+
+        function openModal(index) {
+            const company = companies[index];
+            document.getElementById('modalLogo').src = company.logo;
+            document.getElementById('modalLogo').alt = company.name;
+            document.getElementById('modalName').textContent = company.name;
+            document.getElementById('modalDesc').textContent = company.description;
+            document.getElementById('modalFounded').textContent = company.founded;
+            document.getElementById('modalCountry').textContent = company.country;
+            document.getElementById('modalAwards').textContent = company.awards;
+            const websiteLink = document.getElementById('modalWebsite');
+            websiteLink.href = company.website;
+            websiteLink.textContent = company.website;
+
+            const modalGames = document.getElementById('modalGames');
+            modalGames.innerHTML = '';
+            company.games.forEach(game => {
+                const li = document.createElement('li');
+                li.textContent = game;
+                modalGames.appendChild(li);
+            });
+
+            modal.style.display = 'flex';
+        }
+
+        closeModal.addEventListener('click', () => {
+            modal.style.display = 'none';
+        });
+
+        window.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                modal.style.display = 'none';
+            }
+        });
+    </script>
+
+</body>
+
+</html>

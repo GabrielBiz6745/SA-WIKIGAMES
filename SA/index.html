@@ -1,0 +1,837 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Catálogo de Jogos</title>
+    <link rel="shortcut icon" type="image/x-icon" href="icon.jpg">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #121212;
+            color: #f5f5f5;
+            margin: 0;
+            padding: 0;
+        }
+
+
+        header {
+            background-color: #1f1f1f;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid #ff3c3c;
+        }
+
+        header h1 {
+            margin: 0;
+        }
+
+        header nav button {
+            margin-left: 10px;
+            padding: 8px 15px;
+            border: none;
+            border-radius: 5px;
+            background-color: #ff3c3c;
+            color: #fff;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        header nav button:hover {
+            background-color: #ff6565;
+        }
+
+        header h1 {
+            margin: 0;
+            color: #ff3c3c;
+            font-size: 26px;
+            letter-spacing: 1px;
+        }
+
+
+        .container {
+            display: flex;
+            flex-wrap: wrap;
+            padding: 20px;
+            gap: 25px;
+            justify-content: center;
+        }
+
+        .game-card {
+            width: 220px;
+            background: linear-gradient(135deg, #222, #111);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.7);
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .game-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(255, 60, 60, 0.6);
+        }
+
+        .game-card img {
+            width: 100%;
+            height: 260px;
+            object-fit: cover;
+            border-bottom: 3px solid #ff3c3c;
+        }
+
+        .game-card h3 {
+            margin: 12px;
+            font-size: 18px;
+            color: #ff8c8c;
+            text-align: center;
+        }
+
+
+        /* Modal */
+        #gameModal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.85);
+            justify-content: center;
+            align-items: center;
+            z-index: 10;
+            overflow-y: auto;
+            padding: 10px;
+        }
+
+        #gameModal .modal-content {
+            background: #111;
+            width: 100%;
+            max-width: 600px;
+            max-height: 90vh;
+            border-radius: 14px;
+            padding: 15px;
+            position: relative;
+            color: #eee;
+            box-shadow: 0 8px 30px rgba(255, 60, 60, 0.5);
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+        }
+
+        /* Imagem */
+        #gameModal img {
+            width: 100%;
+            height: auto;
+            max-height: calc(50vh - 10px);
+            object-fit: contain;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            border: 2px solid #ff3c3c;
+            display: block;
+            box-sizing: border-box;
+        }
+
+        /* Botão fechar */
+        #gameModal .close {
+            position: absolute;
+            top: 12px;
+            right: 16px;
+            font-size: 28px;
+            cursor: pointer;
+            color: #ff3c3c;
+            transition: color 0.2s;
+        }
+
+        #gameModal .close:hover {
+            color: #ff8c8c;
+        }
+
+        /* Título */
+        #gameModal h2 {
+            margin-bottom: 12px;
+            color: #ff3c3c;
+        }
+
+        /* Detalhes */
+        .game-details {
+            margin: 8px 0;
+            line-height: 1.4;
+        }
+
+        /* ================================ */
+        /* Barra de rolagem personalizada   */
+        /* ================================ */
+        #gameModal .modal-content::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        #gameModal .modal-content::-webkit-scrollbar-track {
+            background: #1a1a1a;
+            border-radius: 10px;
+        }
+
+        #gameModal .modal-content::-webkit-scrollbar-thumb {
+            background: #ff3c3c;
+            border-radius: 10px;
+        }
+
+        #gameModal .modal-content::-webkit-scrollbar-thumb:hover {
+            background: #ff6b6b;
+        }
+
+        /* Suporte para Firefox */
+        #gameModal .modal-content {
+            scrollbar-width: thin;
+            scrollbar-color: #ff3c3c #1a1a1a;
+            /* thumb | track */
+        }
+
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+            color: #eee;
+        }
+
+        table,
+        th,
+        td {
+            border: 1px solid #ff3c3c;
+        }
+
+        th,
+        td {
+            padding: 8px;
+            text-align: center;
+        }
+
+        th {
+            background: #222;
+        }
+
+        td {
+            background: #1a1a1a;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <h1>Catálogo de Jogos</h1>
+        <nav>
+            <button onclick="window.location.href='index.html'">Catálogo de Jogos</button>
+            <button onclick="window.location.href='empresas.html'">Empresas de Jogos</button>
+            <button onclick="window.location.href='noticias.html'">Notícias</button>
+        </nav>
+    </header>
+
+
+    <div class="container" id="gameContainer">
+        <!-- Jogos serão carregados aqui -->
+    </div>
+
+    <!-- Modal de detalhe do jogo -->
+    <div id="gameModal">
+        <div class="modal-content">
+            <span class="close" id="modalClose">&times;</span>
+            <img id="modalCover" src="" alt="Capa do jogo">
+            <h2 id="modalTitle">Nome do Jogo</h2>
+            <div class="game-details"><strong>Empresa:</strong> <span id="modalCompany"></span></div>
+            <div class="game-details"><strong>Data de Lançamento:</strong> <span id="modalDate"></span></div>
+            <div class="game-details"><strong>Gênero:</strong> <span id="modalGenre"></span></div>
+            <div class="game-details"><strong>Classificação etária:</strong> <span id="modalRating"></span></div>
+            <div class="game-details"><strong>Metacritic:</strong> <span id="modalMetacritic"></span></div>
+            <div class="game-details"><strong>Avaliação do público:</strong> <span id="modalUserScore"></span></div>
+            <div class="game-details"><strong>Plataformas:</strong> <span id="modalPlatform"></span></div>
+            <div class="game-details"><strong>Dados técnicos:</strong> <span id="modalTechData"></span></div>
+            <div class="game-details"><strong>Requisitos mínimos(PC):</strong> <span id="modalReqMin"></span></div>
+            <div class="game-details"><strong>Requisitos recomendados(PC):</strong> <span id="modalReqRec"></span></div>
+            <div class="game-details"><strong>Prêmios:</strong> <span id="modalAwards"></span></div>
+            <div class="game-details"><strong>Descrição:</strong>
+
+                <p id="modalDesc"></p>
+            </div>
+            <div class="game-details"><strong>Preços por Plataforma:</strong>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>PlayStation</th>
+                            <th>Xbox</th>
+                            <th>Nintendo</th>
+                            <th>Steam</th>
+                            <th>Mobile</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td id="modalPricePS"></td>
+                            <td id="modalPriceXbox"></td>
+                            <td id="modalPriceNintendo"></td>
+                            <td id="modalPriceSteam"></td>
+                            <td id="modalPriceMobile"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="game-details"><strong>Microtransações:</strong> <span id="modalMicro"></span></div>
+        </div>
+    </div>
+
+    <script>
+        // Dados dos jogos
+        const games = [
+            { //DARK SOULS III
+                title: 'Dark Souls III',
+                company: 'FromSoftware / Bandai Namco',
+                cover: 'CAPAS/DSIII.webp',
+                release: '12 de abril de 2016',
+                genre: 'RPG de ação',
+                description: 'Dark Souls III é um RPG de ação desafiador, focado em combate estratégico e exploração de um mundo sombrio e interconectado.',
+                price: { ps: 'R$149,90', xbox: 'R$159,90', nintendo: '-', steam: 'R$129,90', mobile: '-' },
+                microtransactions: 'Não Possui',
+                rating: '18+',
+                metacritic: 89,
+                userScore: '9.0/10',
+                techData: 'Motor proprietário, combate em tempo real, gráficos sombrios e detalhados',
+                awards: 'Melhor RPG de Ação 2016',
+                requirements: {
+                    minimum: 'Intel Core i3-2100 / 4GB RAM / NVIDIA GeForce GTX 750 / 25GB',
+                    recommended: 'Intel Core i7-3770 / 8GB RAM / NVIDIA GeForce GTX 970 / 25GB'
+                },
+                platform: 'PlayStation, Xbox, Steam'
+            },
+            { //THE LEGEND OF ZELDA: BREATH OF THE WILD
+                title: 'The Legend of Zelda: Breath of the Wild',
+                company: 'Nintendo',
+                cover: 'CAPAS/The_Legend_of_Zelda_Breath_of_the_Wild.jpg',
+                release: '3 de março de 2017',
+                genre: 'Ação/Aventura',
+                description: 'Explore o vasto mundo de Hyrule, resolvendo puzzles, enfrentando inimigos e descobrindo segredos neste aclamado jogo de aventura.',
+                price: { ps: '-', xbox: '-', nintendo: 'R$349,90', steam: '-', mobile: '-' },
+                microtransactions: 'Não Possui',
+                rating: '10+',
+                metacritic: 97,
+                userScore: '9.5/10',
+                techData: 'Motor proprietário da Nintendo, mundo aberto, física avançada e puzzles interativos',
+                awards: 'Jogo do Ano 2017, Melhor Aventura',
+                requirements: {
+                    minimum: '-',
+                    recommended: '-'
+                },
+                platform: 'Nintendo Switch, Wii U'
+            },
+            { //FORTNITE
+                title: 'Fortnite',
+                company: 'Epic Games',
+                cover: 'CAPAS/Fortnite_29_-_Cover_Art_-_Fortnite.webp',
+                release: '21 de julho de 2017',
+                genre: 'Battle Royale',
+                description: 'Fortnite é um jogo multiplayer online em que 100 jogadores lutam para sobreviver em um mapa, coletando recursos e construindo estruturas.',
+                price: { ps: 'Grátis', xbox: 'Grátis', nintendo: 'Grátis', steam: 'Grátis', mobile: 'Grátis' },
+                microtransactions: 'Possui',
+                rating: '10+',
+                metacritic: 0,
+                userScore: '8.0/10',
+                techData: 'Motor Unreal Engine, multiplayer online massivo, cross-platform',
+                awards: 'Indicado a Melhor Multiplayer 2018',
+                requirements: {
+                    minimum: 'SO: Windows 7/8/10 / CPU: Core i3 / RAM: 4GB / GPU: Intel HD 4000 / 15GB',
+                    recommended: 'SO: Windows 10 / CPU: Core i5 / RAM: 8GB / GPU: GTX 660 / 15GB'
+                },
+                platform: 'PlayStation, Xbox, Nintendo Switch, Steam, Mobile'
+            },
+            { //ROCKET LEAGUE
+                title: 'Rocket League',
+                company: 'Psyonix',
+                cover: 'CAPAS/rl_evergreen-BuFUX3Ml.jpg',
+                release: '7 de julho de 2015',
+                genre: 'Esporte/Veículos',
+                description: 'Rocket League combina futebol com veículos motorizados, onde equipes competem para marcar gols em partidas rápidas e intensas.',
+                price: { ps: 'Grátis', xbox: 'Grátis', nintendo: 'Grátis', steam: 'Grátis', mobile: '-' },
+                microtransactions: 'Possui',
+                rating: 'L',
+                metacritic: 85,
+                userScore: '8.5/10',
+                techData: 'Motor Unreal Engine, partidas rápidas, cross-platform',
+                awards: 'Melhor Jogo Esportivo 2015',
+                requirements: {
+                    minimum: 'SO: Windows 7 / CPU: 2.4GHz Dual Core / RAM: 4GB / GPU: NVIDIA GTX 260 / 7GB',
+                    recommended: 'SO: Windows 10 / CPU: Intel i5 / RAM: 8GB / GPU: GTX 660 / 7GB'
+                },
+                platform: 'PlayStation, Xbox, Nintendo Switch, Steam'
+            },
+            { //CALL OF DUTY: WARZONE
+                title: 'Call of Duty: Warzone',
+                company: 'Activision',
+                cover: 'CAPAS/header.jpg',
+                release: '10 de março de 2020',
+                genre: 'Battle Royale / FPS',
+                description: 'Call of Duty: Warzone é um jogo de tiro em primeira pessoa com modo Battle Royale, oferecendo combates intensos e estratégias em equipe.',
+                price: { ps: 'Grátis', xbox: 'Grátis', nintendo: '-', steam: 'Grátis', mobile: '-' },
+                microtransactions: 'Possui',
+                rating: '16+',
+                metacritic: 0,
+                userScore: '8.2/10',
+                techData: 'Motor IW Engine, partidas massivas online, cross-platform',
+                awards: 'Indicado a Melhor Multiplayer 2020',
+                requirements: {
+                    minimum: 'SO: Windows 10 / CPU: Intel Core i3 / RAM: 8GB / GPU: GTX 670 / 80GB',
+                    recommended: 'SO: Windows 10 / CPU: Intel Core i5 / RAM: 16GB / GPU: GTX 970 / 80GB'
+                },
+                platform: 'PlayStation, Xbox, Steam'
+            },
+            { //MINECRAFT
+                title: 'Minecraft',
+                company: 'Mojang Studios',
+                cover: 'CAPAS/minecraft.jpg',
+                release: '17 de maio de 2009',
+                genre: 'Sandbox / Aventura',
+                description: 'Um jogo de construção e sobrevivência em um mundo aberto, onde os jogadores podem explorar, criar e enfrentar criaturas.',
+                price: { ps: 'R$83,50', xbox: 'R$74,95', nintendo: 'R$99,00', steam: '-', mobile: 'R$9,90' },
+                microtransactions: 'Possui',
+                rating: '7+',
+                metacritic: 0,
+                userScore: '9.0/10',
+                techData: 'Motor próprio, mundo aberto, multiplayer cross-platform',
+                awards: 'Indicado a Melhor Jogo Criativo',
+                requirements: {
+                    minimum: 'SO: Windows 7 / CPU: 2.0GHz / RAM: 4GB / GPU: Intel HD 4000 / 2GB',
+                    recommended: 'SO: Windows 10 / CPU: Intel i5 / RAM: 8GB / GPU: GTX 660 / 2GB'
+                },
+                platform: 'PlayStation, Xbox, Nintendo Switch, Steam, Mobile'
+            },
+            { //GOD OF WAR III
+                title: 'God of War III',
+                company: 'Santa Monica Studio / Sony Interactive Entertainment',
+                cover: 'CAPAS/gowiii.png',
+                release: '16 de março de 2010',
+                genre: 'Hack and Slash / Ação',
+                description: 'O fim do Olimpo se aproxima enquanto Kratos enfrenta os deuses gregos em uma jornada épica de vingança contra Zeus.',
+                price: { ps: 'R$99', xbox: '-', nintendo: '-', steam: '-', mobile: '-' },
+                microtransactions: 'Não Possui',
+                rating: '16+',
+                metacritic: 0,
+                userScore: '8.8/10',
+                techData: 'Motor proprietário, gráficos avançados, combate em tempo real',
+                awards: 'Melhor Jogo de Ação 2010',
+                requirements: {
+                    minimum: '-',
+                    recommended: '-'
+                },
+                platform: 'PlayStation 3, PlayStation 4'
+            },
+            { //THE WITCHER 3: WILD HUNT
+                title: 'The Witcher 3: Wild Hunt',
+                company: 'CD Projekt Red',
+                cover: 'CAPAS/thewitcheriii.jpg',
+                release: '19 de maio de 2015',
+                genre: 'RPG de ação',
+                description: 'Um dos RPGs mais aclamados da história, com mundo aberto e narrativa complexa.',
+                price: { ps: 'R$99', xbox: 'R$99', nintendo: 'R$249', steam: 'R$79', mobile: '—' },
+                microtransactions: 'Não',
+                rating: '18+',
+                metacritic: 93,
+                userScore: '9.2/10',
+                techData: 'Motor REDengine 3, resolução 4K, HDR, 60 FPS (PS5/XSX)',
+                awards: 'Jogo do Ano (2015), Melhor RPG, Melhor Narrativa',
+                requirements: {
+                    minimum: 'Intel i5-2500K / 8GB RAM / GTX 660 / 50GB livre',
+                    recommended: 'Intel i7-3770 / 16GB RAM / GTX 770 / SSD'
+                },
+                platform: 'PlayStation, Xbox, Steam, Nintendo Switch'
+            },
+            { //ELDEN RING
+                title: 'Elden Ring',
+                company: 'FromSoftware / Bandai Namco',
+                cover: 'https://cdn.cloudflare.steamstatic.com/steam/apps/1245620/header.jpg',
+                release: '25 de fevereiro de 2022',
+                genre: 'RPG de ação / Mundo aberto',
+                description: 'Uma aventura grandiosa no Interlúdio, com liberdade total e combates intensos.',
+                price: { ps: 'R$ 249,90', xbox: 'R$ 249,90', nintendo: '-', steam: 'R$ 229,90', mobile: '-' },
+                microtransactions: 'Não',
+                rating: '16+',
+                metacritic: 96,
+                userScore: '9.4/10',
+                techData: 'Motor próprio FromSoftware, gráficos 4K, HDR, 60 FPS no console, combate desafiador, mundo aberto interconectado',
+                awards: 'Jogo do Ano 2022, Melhor RPG, Melhor Design de Mundo Aberto',
+                requirements: {
+                    minimum: 'SO: Windows 10 / CPU: Intel Core i5-8400 / RAM: 12GB / GPU: NVIDIA GTX 1060 / 60GB',
+                    recommended: 'SO: Windows 10 / CPU: Intel Core i7-8700K / RAM: 16GB / GPU: NVIDIA RTX 3070 / 60GB'
+                },
+                platform: 'PlayStation, Xbox, Steam'
+            },
+            { //THE ELDER SCROLLS V: SKYRIM
+                title: 'The Elder Scrolls V: Skyrim',
+                company: 'Bethesda Game Studios',
+                cover: 'CAPAS/elder-scrolls-skyrim-button-2017.webp',
+                release: '11 de novembro de 2011',
+                genre: 'RPG de Ação / Mundo Aberto',
+                description: 'Explore o vasto mundo de Skyrim, complete missões épicas e enfrente dragões lendários enquanto molda o destino do seu personagem.',
+                price: { ps: 'R$99', xbox: 'R$99', nintendo: 'R$199', steam: 'R$59', mobile: '-' },
+                microtransactions: 'Não',
+                rating: '18+',
+                metacritic: 94,
+                userScore: '9.0/10',
+                techData: 'Motor Creation Engine, suporte a mods, resolução 1080p/4K, 30-60 FPS',
+                awards: 'Jogo do Ano (2011), Melhor RPG, Melhor Trilha Sonora',
+                requirements: {
+                    minimum: 'SO: Windows 7 / CPU: Dual Core 2.0 GHz / RAM: 2GB / GPU: NVIDIA GeForce 8800 / Armazenamento: 6GB',
+                    recommended: 'SO: Windows 7/8/10 / CPU: Quad Core 2.6 GHz / RAM: 4GB / GPU: NVIDIA GeForce GTX 260 / Armazenamento: 8GB'
+                },
+                platform: 'PlayStation, Xbox, Steam, Nintendo Switch'
+            },
+            { //THE CREW 2
+                title: 'The Crew 2',
+                company: 'Ubisoft',
+                cover: 'CAPAS/crew2.jpg',
+                release: '29 de junho de 2018',
+                genre: 'Corrida / Mundo Aberto',
+                description: 'Participe de corridas de carros, motos, barcos e aviões em um enorme mundo aberto dos EUA. Customize veículos e explore diversas competições.',
+                price: { ps: 'R$149', xbox: 'R$149', nintendo: '-', steam: 'R$129', mobile: '-' },
+                microtransactions: 'Sim (cosméticos e passes de temporada)',
+                rating: '12+',
+                metacritic: 73,
+                userScore: '7.5/10',
+                techData: 'Motor Unreal Engine 4, mundo aberto persistente, multiplayer online',
+                awards: 'Indicado a Melhor Jogo de Corrida 2018',
+                requirements: {
+                    minimum: 'SO: Windows 7/8/10 64-bit / CPU: Intel Core i5-2400 / RAM: 8GB / GPU: NVIDIA GeForce GTX 660 / Armazenamento: 30GB',
+                    recommended: 'SO: Windows 7/8/10 64-bit / CPU: Intel Core i7-3770 / RAM: 16GB / GPU: NVIDIA GeForce GTX 970 / Armazenamento: 30GB'
+                },
+                platform: 'PlayStation, Xbox, Steam'
+            },
+            { //GOD OF WAR RAGNARÖK
+                title: 'God of War Ragnarök',
+                company: 'Santa Monica Studio / Sony Interactive Entertainment',
+                cover: 'CAPAS/ragnarok.jpg',
+                release: '9 de novembro de 2022',
+                genre: 'Ação e Aventura',
+                description: 'Kratos e Atreus embarcam em uma jornada épica pelos Nove Reinos enquanto o Ragnarök se aproxima.',
+                price: { ps: 'R$349', xbox: '-', nintendo: '-', steam: '-', mobile: '-' },
+                microtransactions: 'Não',
+                rating: '16+',
+                metacritic: 94,
+                userScore: '9.3/10',
+                techData: 'Motor proprietário, gráficos 4K, HDR, 60 FPS (PS5)',
+                awards: 'Jogo do Ano 2022, Melhor Direção de Arte',
+                requirements: {
+                    minimum: '-',
+                    recommended: '-'
+                },
+                platform: 'PlayStation 4, PlayStation 5'
+            },
+            { //BATTLEFIELD 6
+                title: 'Battlefield 6',
+                company: 'DICE / Electronic Arts',
+                cover: 'CAPAS/battle6.jpg',
+                release: '10 de outubro de 2025',
+                genre: 'FPS / Multiplayer',
+                description: 'Participe de batalhas em grande escala em mapas massivos, com veículos, destruição total e combates estratégicos.',
+                price: { ps: 'R$299', xbox: 'R$299', nintendo: '-', steam: 'R$279', mobile: '-' },
+                microtransactions: 'Sim (cosméticos e passes)',
+                rating: '18+',
+                metacritic: 82,
+                userScore: '8.0/10',
+                techData: 'Motor Frostbite, suporte a 4K e 60 FPS, multiplayer online',
+                awards: '',
+                requirements: {
+                    minimum: 'SO: Windows 10 64-bit / CPU: Intel Core i5-6600K / RAM: 8GB / GPU: GTX 1050 Ti / Armazenamento: 50GB',
+                    recommended: 'SO: Windows 10 64-bit / CPU: Intel Core i7-9700K / RAM: 16GB / GPU: RTX 2070 / Armazenamento: 50GB'
+                },
+                platform: 'PlayStation, Xbox, Steam'
+            },
+            { //ASSASSIN'S CREED IV: BLACK FLAG
+                title: "Assassin's Creed IV: Black Flag",
+                company: 'Ubisoft',
+                cover: 'CAPAS/creediv.jpg',
+                release: '29 de outubro de 2013',
+                genre: 'Ação / Aventura / Mundo Aberto',
+                description: 'Explore os mares do Caribe como Edward Kenway, participando de batalhas navais, pirataria e missões de assassinato.',
+                price: { ps: 'R$79', xbox: 'R$79', nintendo: '-', steam: 'R$49', mobile: '-' },
+                microtransactions: 'Não',
+                rating: '16+',
+                metacritic: 88,
+                userScore: '8.7/10',
+                techData: 'Motor AnvilNext, mundo aberto, suporte a 1080p, mods na versão PC',
+                awards: 'Melhor Design de Mundo Aberto 2013',
+                requirements: {
+                    minimum: 'SO: Windows Vista / CPU: Intel Core 2 Duo E6700 / RAM: 2GB / GPU: NVIDIA 8800 GT / Armazenamento: 30GB',
+                    recommended: 'SO: Windows 7 / CPU: Intel Core i5-2400 / RAM: 4GB / GPU: GTX 560 / Armazenamento: 30GB'
+                },
+                platform: 'PlayStation, Xbox, Steam'
+            },
+            { //HOLLOW KNIGHT
+                title: 'Hollow Knight',
+                company: 'Team Cherry',
+                cover: 'CAPAS/HK.jpg',
+                release: '24 de fevereiro de 2017',
+                genre: 'Metroidvania / Ação',
+                description: 'Explore Hallownest, um reino subterrâneo cheio de criaturas sombrias, segredos e chefes desafiadores.',
+                price: { ps: 'R$99', xbox: 'R$49', nintendo: 'R$59', steam: 'R$29', mobile: '-' },
+                microtransactions: 'Não',
+                rating: '10+',
+                metacritic: 90,
+                userScore: '9.1/10',
+                techData: 'Motor Unity, suporte a resolução 1080p, animação 2D fluida',
+                awards: 'Indicado a Melhor Jogo Independente 2017',
+                requirements: {
+                    minimum: 'SO: Windows 7 / CPU: 1.2 GHz Dual Core / RAM: 4GB / GPU: Intel HD 4000 / Armazenamento: 9GB',
+                    recommended: 'SO: Windows 10 / CPU: 2.0 GHz Dual Core / RAM: 8GB / GPU: NVIDIA GTX 460 / Armazenamento: 9GB'
+                },
+                platform: 'Xbox, Nintendo Switch, Steam'
+            },
+            { //LEGO STAR WARS: THE SKYWALKER SAGA
+                title: 'Lego Star Wars: The Skywalker Saga',
+                company: 'Traveller’s Tales / Warner Bros. Interactive Entertainment',
+                cover: 'CAPAS/LEGOStarWarsTheSkywalkerSaga.jpg',
+                release: '5 de abril de 2022',
+                genre: 'Ação / Aventura / Família',
+                description: 'Reviva todas as nove trilogias de filmes de Star Wars com humor típico da franquia Lego, batalhas, puzzles e exploração de planetas icônicos.',
+                price: { ps: 'R$249,90', xbox: 'R$249,90', nintendo: 'R$259,90', steam: 'R$199,90', mobile: '-' },
+                microtransactions: 'Não',
+                rating: '10+',
+                metacritic: 82,
+                userScore: '8.5/10',
+                techData: 'Motor Proprietário Lego, gráficos 3D coloridos, multiplayer local e online, cross-platform',
+                awards: 'Indicado a Melhor Jogo Familiar 2022',
+                requirements: {
+                    minimum: 'SO: Windows 10 / CPU: Intel i5-4690 / RAM: 8GB / GPU: NVIDIA GTX 960 / 15GB',
+                    recommended: 'SO: Windows 10 / CPU: Intel i7-6700 / RAM: 16GB / GPU: NVIDIA GTX 1070 / 15GB'
+                },
+                platform: 'PlayStation, Xbox, Nintendo Switch, Steam'
+            },
+            { //HALO 3
+                title: 'Halo 3',
+                company: 'Bungie / Microsoft Studios',
+                cover: 'CAPAS/Halo_3.jpg',
+                release: '25 de setembro de 2007',
+                genre: 'FPS / Sci-Fi',
+                description: 'Halo 3 conclui a trilogia original do Master Chief, oferecendo campanha épica, multiplayer competitivo e batalhas em larga escala contra os Covenant.',
+                price: { ps: '-', xbox: 'R$129,90', nintendo: '-', steam: '-', mobile: '-' },
+                microtransactions: 'Não',
+                rating: '16+',
+                metacritic: 94,
+                userScore: '9.2/10',
+                techData: 'Motor próprio da Bungie, gráficos 720p/1080p, multiplayer online, suporte a partidas cooperativas',
+                awards: 'Jogo do Ano 2007, Melhor FPS',
+                requirements: {
+                    minimum: '-',
+                    recommended: '-'
+                },
+                platform: 'Xbox 360, Xbox One (Retrocompatível)'
+            },
+            { //FORZA HORIZON 5
+                title: 'Forza Horizon 5',
+                company: 'Playground Games / Xbox Game Studios',
+                cover: 'CAPAS/FZ5.jpg',
+                release: '29 de abril de 2025 (PS5)',
+                genre: 'Corrida / Mundo aberto',
+                description: 'Explore o vasto e vibrante mundo do México em um festival de velocidade sem igual. Forza Horizon 5 oferece mais de 900 carros, atualizações temáticas e expansões como Hot Wheels e Rally Adventure.',
+                price: { ps: 'R$249,00', xbox: 'R$249,00', nintendo: 'indisponível', steam: 'indisponível', mobile: 'indisponível' },
+                microtransactions: 'Possui',
+                rating: '10+',
+                metacritic: 92,
+                userScore: '9.0/10',
+                techData: 'Suporte a 4K/60fps, feedback tátil no DualSense, áudio 3D, crossplay entre PS5, Xbox e PC',
+                awards: 'Jogo de Corrida do Ano 2021, Melhor Jogo de Mundo Aberto',
+                requirements: {
+                    minimum: 'SO: Windows 10 / CPU: Intel i5-4460 / RAM: 8GB / GPU: NVIDIA GTX 970 / 110GB',
+                    recommended: 'SO: Windows 10 / CPU: Intel i7-10700K / RAM: 16GB / GPU: NVIDIA RTX 3080 / 110GB'
+                },
+                platform: 'PlayStation 5, Xbox One, Xbox Series X/S, PC'
+            },
+            {  //CYBERPUNK 2077
+                title: 'Cyberpunk 2077',
+                company: 'CD Projekt Red',
+                cover: 'CAPAS/Cyberpunk_2077_capa.png',
+                release: '10 de dezembro de 2020',
+                genre: 'RPG de ação / Mundo aberto',
+                description: 'Em Night City, você é um mercenário em busca de um implante único que garante a imortalidade. Explore a cidade, complete missões e interaja com diversos personagens em um mundo vibrante e perigoso.',
+                price: { ps: 'R$249,90', xbox: 'R$249,90', nintendo: '-', steam: 'R$199,90', mobile: '-' },
+                microtransactions: 'Não',
+                rating: '18+',
+                metacritic: 86,
+                userScore: '8.1/10',
+                techData: 'Motor REDengine 4, gráficos 4K, Ray Tracing, suporte a mods no PC',
+                awards: 'Melhor RPG de Ação 2020',
+                requirements: {
+                    minimum: 'SO: Windows 10 / CPU: Intel Core i5-3570K / RAM: 8GB / GPU: GTX 780 / 70GB',
+                    recommended: 'SO: Windows 10 / CPU: Intel Core i7-4790 / RAM: 16GB / GPU: RTX 2060 / 70GB'
+                },
+                platform: 'PlayStation, Xbox, Steam'
+            },
+            { //RESIDENT EVIL 4 REMAKE
+                title: 'Resident Evil 4 Remake',
+                company: 'Capcom',
+                cover: 'CAPAS/RE4Remake.jpg',
+                release: '24 de março de 2023',
+                genre: 'Survival Horror / Ação',
+                description: 'O clássico Resident Evil 4 recebe um remake completo, com gráficos modernizados, jogabilidade aprimorada e imersão renovada, acompanhando Leon S. Kennedy em uma missão perigosa para resgatar a filha do presidente dos EUA.',
+                price: { ps: 'R$299,90', xbox: 'R$299,90', nintendo: '-', steam: 'R$249,90', mobile: '-' },
+                microtransactions: 'Não',
+                rating: '18+',
+                metacritic: 94,
+                userScore: '9.1/10',
+                techData: 'RE Engine, gráficos 4K/60FPS, áudio 3D, combate em terceira pessoa, suporte a Ray Tracing no PC',
+                awards: 'Melhor Remake 2023, Melhor Jogo de Terror',
+                requirements: {
+                    minimum: 'SO: Windows 10 / CPU: Intel Core i5-4460 / RAM: 8GB / GPU: NVIDIA GTX 760 / 50GB',
+                    recommended: 'SO: Windows 10 / CPU: Intel Core i7-8700 / RAM: 16GB / GPU: NVIDIA RTX 2060 / 50GB'
+                },
+                platform: 'PlayStation, Xbox, Steam'
+            },
+            { //DEATH STRANDING
+                title: 'Death Stranding',
+                company: 'Kojima Productions / Sony Interactive Entertainment',
+                cover: 'CAPAS/ds.jpg',
+                release: '14 de julho de 2020 (PC)',
+                genre: 'Ação / Aventura / Mundo Aberto',
+                description: 'Em um mundo pós-apocalíptico, conecte cidades isoladas e reconstrua a sociedade enquanto enfrenta criaturas sobrenaturais e desafios ambientais.',
+                price: { ps: 'R$199,90', xbox: '-', nintendo: '-', steam: 'R$149,90', mobile: '-' },
+                microtransactions: 'Não',
+                rating: '16+',
+                metacritic: 82,
+                userScore: '8.3/10',
+                techData: 'Motor Decima, gráficos 4K, HDR, 60 FPS no PS5, mundo aberto imersivo',
+                awards: 'Melhor Direção de Arte 2019',
+                requirements: {
+                    minimum: 'SO: Windows 10 / CPU: Intel Core i5-3470 / RAM: 8GB / GPU: NVIDIA GTX 1050 / 80GB',
+                    recommended: 'SO: Windows 10 / CPU: Intel Core i7-3770 / RAM: 16GB / GPU: NVIDIA GTX 1060 / 80GB'
+                },
+                platform: 'PlayStation, Steam'
+            },
+            { //OVERWATCH 2
+                title: 'Overwatch 2',
+                company: 'Blizzard Entertainment',
+                cover: 'CAPAS/OW.jpg',
+                release: '4 de outubro de 2022',
+                genre: 'FPS / Multiplayer',
+                description: 'Overwatch 2 é a sequência do popular jogo de tiro em equipe, oferecendo novos heróis, mapas e modos de jogo, além de uma experiência gratuita com crossplay entre plataformas.',
+                price: { ps: 'Grátis', xbox: 'Grátis', nintendo: 'Grátis', steam: 'Grátis', mobile: '-' },
+                microtransactions: 'Possui',
+                rating: '12+',
+                metacritic: 80,
+                userScore: '7.8/10',
+                techData: 'Motor proprietário da Blizzard, gráficos estilizados, multiplayer online massivo, cross-platform',
+                awards: 'Indicado a Melhor Multiplayer 2022',
+                requirements: {
+                    minimum: 'SO: Windows 10 / CPU: Intel Core i3 / RAM: 4GB / GPU: NVIDIA GTX 600 Series / 30GB',
+                    recommended: 'SO: Windows 10 / CPU: Intel Core i5 / RAM: 8GB / GPU: NVIDIA GTX 900 Series / 30GB'
+                },
+                platform: 'PlayStation, Xbox, Nintendo Switch, Steam'
+            },
+            { //FALLOUT 4
+                title: 'Fallout 4',
+                company: 'Bethesda Game Studios',
+                cover: 'CAPAS/fallout4.jpg',
+                release: '10 de novembro de 2015',
+                genre: 'RPG de Ação / Mundo Aberto',
+                description: 'Explore o pós-apocalipse em uma jornada épica pelo Wasteland, complete missões, construa assentamentos e enfrente inimigos perigosos.',
+                price: { ps: 'R$99', xbox: 'R$99', nintendo: '-', steam: 'R$59', mobile: '-' },
+                microtransactions: 'Não',
+                rating: '18+',
+                metacritic: 88,
+                userScore: '8.5/10',
+                techData: 'Motor Creation Engine, suporte a mods, resolução 1080p/4K, 30-60 FPS',
+                awards: 'Melhor RPG de Ação 2015',
+                requirements: {
+                    minimum: 'SO: Windows 7/8/10 / CPU: Intel Core i5-2300 / RAM: 8GB / GPU: NVIDIA GTX 550 Ti / Armazenamento: 30GB',
+                    recommended: 'SO: Windows 7/8/10 / CPU: Intel Core i7-4790 / RAM: 8GB / GPU: NVIDIA GTX 780 / Armazenamento: 30GB'
+                },
+                platform: 'PlayStation, Xbox, Steam'
+            },
+            { //NIER: AUTOMATA
+                title: 'Nier: Automata',
+                company: 'PlatinumGames / Square Enix',
+                cover: 'CAPAS/nierautomata.jpg',
+                release: '17 de março de 2017 (PC)',
+                genre: 'RPG de Ação / Aventura',
+                description: 'Em um futuro distante, androides lutam contra máquinas para recuperar a Terra. Explore uma narrativa profunda com múltiplos finais e combate dinâmico.',
+                price: { ps: 'R$99,90', xbox: 'R$99,90', nintendo: '-', steam: 'R$79,90', mobile: '-' },
+                microtransactions: 'Não',
+                rating: '18+',
+                metacritic: 88,
+                userScore: '8.9/10',
+                techData: 'Motor próprio, gráficos estilizados, combate fluido, múltiplos estilos de jogo',
+                awards: 'Melhor Jogo de Ação 2017',
+                requirements: {
+                    minimum: 'SO: Windows 7/8/10 / CPU: Intel Core i3-2100 / RAM: 4GB / GPU: NVIDIA GeForce GTX 760 / Armazenamento: 50GB',
+                    recommended: 'SO: Windows 7/8/10 / CPU: Intel Core i5-4670K / RAM: 8GB / GPU: NVIDIA GeForce GTX 970 / Armazenamento: 50GB'
+                },
+                platform: 'PlayStation, Xbox, Steam'
+            },
+            { //STAR WARS JEDI: FALLEN ORDER
+                title: 'Star Wars Jedi: Fallen Order',
+                company: 'Respawn Entertainment / Electronic Arts',
+                cover: 'CAPAS/jedi_fallen_order.jpg',
+                release: '15 de novembro de 2019',
+                genre: 'Ação / Aventura / RPG',
+                description: 'Assuma o papel de Cal Kestis, um jovem Jedi em fuga após a Ordem 66. Explore planetas icônicos, aprenda habilidades da Força e enfrente o Império em uma jornada épica.',
+                price: { ps: 'R$149,90', xbox: 'R$149,90', nintendo: '-', steam: 'R$129,90', mobile: '-' },
+                microtransactions: 'Não',
+                rating: '16+',
+                metacritic: 81,
+                userScore: '8.0/10',
+                techData: 'Motor Frostbite, gráficos 4K, HDR, combate em terceira pessoa, exploração de mundo semi-aberto',
+                awards: 'Melhor Jogo de Ação/Aventura 2019',
+                requirements: {
+                    minimum: 'SO: Windows 10 / CPU: Intel Core i3-3220 / RAM: 8GB / GPU: NVIDIA GTX 650 Ti / 75GB',
+                    recommended: 'SO: Windows 10 / CPU: Intel Core i5-6600K / RAM: 16GB / GPU: NVIDIA GTX 1060 / 75GB'
+                },
+                platform: 'PlayStation, Xbox, Steam'
+            }
+        ];
+
+        const container = document.getElementById('gameContainer');
+        games.forEach((game, index) => {
+            const card = document.createElement('div');
+            card.className = 'game-card';
+            card.innerHTML = `
+        <img src="${game.cover}" alt="Capa ${game.title}">
+        <h3>${game.title}</h3>
+      `;
+            card.addEventListener('click', () => openModal(index));
+            container.appendChild(card);
+        });
+
+        const modal = document.getElementById('gameModal');
+        const modalClose = document.getElementById('modalClose');
+
+        function openModal(index) {
+            const game = games[index];
+            document.getElementById('modalTitle').textContent = game.title;
+            document.getElementById('modalCompany').textContent = game.company;
+            document.getElementById('modalCover').src = game.cover;
+            document.getElementById('modalDate').textContent = game.release;
+            document.getElementById('modalGenre').textContent = game.genre;
+            document.getElementById('modalDesc').textContent = game.description;
+            document.getElementById('modalPlatform').textContent = game.platform;
+            document.getElementById('modalPricePS').textContent = game.price.ps;
+            document.getElementById('modalPriceXbox').textContent = game.price.xbox;
+            document.getElementById('modalPriceNintendo').textContent = game.price.nintendo;
+            document.getElementById('modalPriceSteam').textContent = game.price.steam;
+            document.getElementById('modalPriceMobile').textContent = game.price.mobile;
+            document.getElementById('modalMicro').textContent = game.microtransactions;
+            document.getElementById('modalRating').textContent = game.rating;
+            document.getElementById('modalMetacritic').textContent = game.metacritic + '/100';
+            document.getElementById('modalReqMin').textContent = game.requirements?.minimum || '—';
+            document.getElementById('modalReqRec').textContent = game.requirements?.recommended || '—';
+            document.getElementById('modalUserScore').textContent = game.userScore || '—';
+            document.getElementById('modalTechData').textContent = game.techData || '—';
+            document.getElementById('modalAwards').textContent = game.awards || '—';
+            modal.style.display = 'flex';
+        }
+
+        modalClose.addEventListener('click', () => { modal.style.display = 'none'; });
+        window.addEventListener('click', (e) => { if (e.target === modal) modal.style.display = 'none'; });
+    </script>
+</body>
+
+</html>
