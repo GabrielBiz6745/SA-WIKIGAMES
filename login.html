@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - GameVault</title>
+    <link rel="shortcut icon" type="image/x-icon" href="icone.png">
+
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #0d0d0d;
+            color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .login-container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: #111;
+            border: 2px solid #ff3c3c;
+            border-radius: 20px;
+            padding: 40px 60px;
+            width: 950px;
+            max-width: 95%;
+            box-shadow: 0 0 25px rgba(255, 60, 60, 0.3);
+            gap: 50px;
+        }
+
+        /* LADO ESQUERDO */
+        .login-left {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            border-right: 2px solid #ff3c3c;
+            padding-right: 50px;
+        }
+
+        .input-box {
+            position: relative;
+            margin-bottom: 20px;
+            width: 100%;
+            max-width: 280px;
+        }
+
+        .input-box input {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #ff3c3c;
+            border-radius: 25px;
+            background: transparent;
+            color: #fff;
+            font-size: 16px;
+            outline: none;
+            transition: 0.3s;
+        }
+
+        .input-box input:focus {
+            border-color: #ff6565;
+            box-shadow: 0 0 10px rgba(255, 60, 60, 0.3);
+        }
+
+        .input-box input::placeholder {
+            color: #999;
+        }
+
+        .login-btn {
+            background: #ff3c3c;
+            color: #fff;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 25px;
+            font-weight: bold;
+            font-size: 16px;
+            cursor: pointer;
+            transition: 0.3s;
+            width: 100%;
+            max-width: 280px;
+        }
+
+        .login-btn:hover {
+            background: #ff6565;
+            transform: scale(1.03);
+        }
+
+        /* LADO DIREITO */
+        .login-right {
+            flex: 1.2;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .login-right h2 {
+            color: #ff3c3c;
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+
+        .login-right p {
+            color: #ccc;
+            font-size: 17px;
+            line-height: 1.6;
+        }
+
+        /* 🔻 Responsivo */
+        @media (max-width: 768px) {
+            .login-container {
+                flex-direction: column;
+                text-align: center;
+                padding: 30px 20px;
+                gap: 30px;
+            }
+
+            .login-left {
+                border-right: none;
+                border-bottom: 2px solid #ff3c3c;
+                padding-right: 0;
+                padding-bottom: 25px;
+            }
+
+            .login-right {
+                padding-left: 0;
+            }
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <div class="login-container">
+        <div class="login-left">
+            <i class="fas fa-user-circle"></i>
+            <form id="loginForm">
+                <div class="input-box">
+                    <i class="fas fa-envelope"></i>
+                    <input type="email" id="email" placeholder="Email..." required>
+                </div>
+
+                <div class="input-box">
+                    <i class="fas fa-lock"></i>
+                    <input type="password" id="senha" placeholder="Senha..." required>
+                </div>
+
+                <button class="login-btn" type="submit">LOGIN</button>
+            </form>
+        </div>
+
+        <div class="login-right">
+            <h2>GameVault - Enciclopédia de Jogos</h2>
+            <p>Descubra informações detalhadas sobre seus jogos favoritos, empresas desenvolvedoras e as últimas
+                notícias do mundo gamer.</p>
+        </div>
+    </div>
+
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    <script>
+        document.getElementById("loginForm").addEventListener("submit", function (e) {
+            e.preventDefault(); // impede envio automático
+
+            const email = document.getElementById("email").value.trim();
+            const senha = document.getElementById("senha").value.trim();
+
+            if (!email || !senha) {
+                alert("Por favor, preencha o email e a senha.");
+                return;
+            }
+
+            // Simulação de login válido (pode futuramente validar com backend)
+            alert("Login realizado com sucesso!");
+            window.location.href = "index.html"; // redireciona para a página principal
+        });
+    </script>
+
+</body>
+
+</html>

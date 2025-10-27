@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notícias - Mundo dos Jogos</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="shortcut icon" type="image/x-icon" href="icone.png">
+</head>
+
+<body>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #121212;
+            color: #f5f5f5;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* HEADER */
+        header {
+            background-color: #1f1f1f;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid #ff3c3c;
+        }
+
+        header h1 {
+            margin: 0;
+            color: #ff3c3c;
+            font-size: 26px;
+            letter-spacing: 1px;
+        }
+
+        header nav button {
+            margin-left: 10px;
+            padding: 8px 15px;
+            border: none;
+            border-radius: 5px;
+            background-color: #ff3c3c;
+            color: #fff;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+
+        header nav button:hover {
+            background-color: #ff6565;
+        }
+
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo {
+            width: 50px;
+            /* tamanho da logo */
+            height: auto;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            margin-left: 20px;
+            font-weight: bold;
+        }
+
+        nav a:hover {
+            color: #ff4040;
+        }
+
+        .search-bar {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .search-bar input {
+            padding: 6px 10px;
+            border-radius: 20px;
+            border: none;
+            outline: none;
+            width: 180px;
+        }
+
+        .search-bar button {
+            background-color: #ff4040;
+            border: none;
+            border-radius: 50%;
+            color: white;
+            width: 35px;
+            height: 35px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .search-bar button:hover {
+            background-color: #ff5c5c;
+        }
+
+        /* CONTAINER DAS NOTÍCIAS */
+        #news-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 25px;
+            padding: 20px;
+        }
+
+        /* CARD DE NOTÍCIA */
+        .news-card {
+            width: 360px;
+            background: linear-gradient(135deg, #222, #111);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.7);
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .news-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(255, 60, 60, 0.6);
+        }
+
+        .news-card img {
+            width: 100%;
+            height: 180px;
+            object-fit: cover;
+            border-bottom: 3px solid #ff3c3c;
+        }
+
+        .news-card h3 {
+            padding: 12px;
+            font-size: 18px;
+            color: #ff8c8c;
+            text-align: center;
+        }
+
+        /* MODAL DE NOTÍCIA */
+        #newsModal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.85);
+            justify-content: center;
+            align-items: center;
+            z-index: 10;
+            overflow-y: auto;
+            padding: 10px;
+        }
+
+        #newsModal .modal-content {
+            background: #111;
+            width: 100%;
+            max-width: 600px;
+            max-height: 90vh;
+            border-radius: 14px;
+            padding: 20px;
+            position: relative;
+            color: #eee;
+            box-shadow: 0 8px 30px rgba(255, 60, 60, 0.5);
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+        }
+
+        #newsModal h2 {
+            color: #ff3c3c;
+            margin-bottom: 10px;
+        }
+
+        #newsModal p {
+            margin: 8px 0;
+            line-height: 1.4;
+        }
+
+        #newsModal a {
+            display: inline-block;
+            margin-top: 12px;
+            padding: 8px 15px;
+            background: #ff3c3c;
+            color: #fff;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: bold;
+            align-self: flex-start;
+        }
+
+        #newsModal a:hover {
+            background: #ff6b6b;
+        }
+
+        #newsModal .close {
+            position: absolute;
+            top: 12px;
+            right: 16px;
+            font-size: 28px;
+            cursor: pointer;
+            color: #ff3c3c;
+            transition: color 0.2s;
+        }
+
+        #newsModal .close:hover {
+            color: #ff8c8c;
+        }
+
+        /* ================================ */
+        /* Barra de rolagem personalizada   */
+        /* ================================ */
+        #newsModal .modal-content::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        #newsModal .modal-content::-webkit-scrollbar-track {
+            background: #1a1a1a;
+            border-radius: 10px;
+        }
+
+        #newsModal .modal-content::-webkit-scrollbar-thumb {
+            background: #ff3c3c;
+            border-radius: 10px;
+        }
+
+        #newsModal .modal-content::-webkit-scrollbar-thumb:hover {
+            background: #ff6b6b;
+        }
+
+        /* Suporte para Firefox */
+        #newsModal .modal-content {
+            scrollbar-width: thin;
+            scrollbar-color: #ff3c3c #1a1a1a;
+        }
+    </style>
+
+    <header>
+        <div class="logo-container">
+            <img src="icone.png" alt="Logo do Site" class="logo">
+        </div>
+        <h1>Notícias</h1>
+        <nav>
+            <button onclick="window.location.href='index.html'">Catálogo de Jogos</button>
+            <button onclick="window.location.href='empresas.html'">Empresas de Jogos</button>
+            <button onclick="window.location.href='noticias.html'">Notícias</button>
+        </nav>
+        </div>
+
+        <div class="search-bar">
+            <input type="text" id="searchInput" placeholder="Buscar notícias...">
+            <button onclick="buscarNoticia()">🔍</button>
+        </div>
+    </header>
+
+    <main id="news-container"></main>
+
+    <!--<div id="news-container"></div>-->
+
+    <!-- Modal -->
+    <div id="newsModal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <h2 id="modalTitle"></h2>
+            <p><strong>Proprietário:</strong> <span id="modalOwner"></span></p>
+            <p><strong>Data e hora:</strong> <span id="modalDate"></span></p>
+            <p id="modalExcerpt"></p>
+            <a id="modalLink" href="#" target="_blank">Ver notícia completa</a>
+        </div>
+    </div>
+
+    <script>
+        const news = [
+            {
+                title: "(01/10/2025 - 13:54) Microsoft aumenta assinatura do nível mais alto do Xbox Game Pass em 50%",
+                owner: "IGN",
+                date: "01/10/2025 - 13:54",
+                excerpt: "O Xbox agora cobrará US$ 29,99 por mês pela assinatura do Game Pass Ultimate, US$ 10 a mais do que antes, disse a fabricante do console em uma publicação nesta quarta-feira (1º).",
+                link: "https://www.cnnbrasil.com.br/economia/negocios/microsoft-aumenta-assinatura-do-nivel-mais-alto-do-xbox-game-pass-em-50/",
+                cover: "CAPAS/xbox-news.jpg"
+            },
+            {
+                title: "(13/06/2025 - 10:46) Xbox portátil da Microsoft pode ter sido cancelado",
+                owner: "Flow Games",
+                date: "13/06/2025 - 10:46",
+                excerpt: "Segundo o que Tom Warren, do The Verge, teria escutado, a Microsoft decidiu cancelar o Xbox portátil ao mesmo tempo em que preferiu concentrar seus esforços no software da plataforma Xbox, que deverá receber uma versão personalizada para PCs portáteis e afins. Outra informação revelada pelo jornalista é que apesar de ter desistido de criar o seu próprio portátil, a Microsoft ainda deve trabalhar em um novo console. Não somente isso, ele também acredita que além da Asus, a Microsoft deve trabalhar com outros parceiros para criarem seus consoles Xbox.",
+                link: "https://flowgames.gg/xbox-portatil-da-microsoft-pode-ter-sido-cancelado/",
+                cover: "CAPAS/xboxportatil.jpg"
+            },
+            {
+                title: "(01/10/2025 - 01:01) Forza Horizon 6: veja trailer, lançamento e mais do jogo de corrida",
+                owner: "TechTudo",
+                date: "16/10/2025 - 01:01",
+                excerpt: "Forza Horizon 6 foi anunciado oficialmente pela Microsoft, no dia 25 de setembro, durante a Tokyo Game Show, com data de lançamento prevista para 2026. Inicialmente para Xbox Series X, Xbox Series S, nuvem via Xbox Games Pass e PC, o jogo, que será ambientado no Japão, deve chegar também para PlayStation 5 (PS5), seguindo a tendência do título anterior, que se tornou um sucesso de vendas em 2025. Pensando nisso, o TechTudo reuniu as principais informações já disponíveis sobre o novo game. Confira, a seguir, mais detalhes sobre o anúncio.",
+                link: "https://www.techtudo.com.br/noticias/2025/10/forza-horizon-6-veja-trailer-lancamento-e-mais-do-jogo-de-corrida-edjogos.ghtml",
+                cover: "CAPAS/fhnews.jpg"
+            },
+            {
+                title: "(12/10/2025 - 15:15) Quanto custa assinar o Game Pass e outros serviços de jogos no Brasil? Confira os preços",
+                owner: "TechTudo",
+                date: "12/10/2025 - 15:15",
+                excerpt: "O Game Pass Essential, que substitui o antigo Core, custa R$ 43,90 por mês e garante acesso ao multiplayer online e cerca de 50 jogos selecionados. Já o Game Pass Premium (antigo PC Game Pass) está disponível por R$ 59,90 mensais, incluindo mais de 200 títulos para console, PC e nuvem — mas sem lançamentos no primeiro dia. Por fim, a opção mais completa é o Game Pass Ultimate, que agora passou custar R$ 119,90 por mês. Ele inclui mais de 400 jogos, títulos “day one”, além de benefícios adicionais como EA Play, Clube Fortnite e Ubisoft+ Classics. Segundo a Microsoft, o plano oferecerá mais de 75 lançamentos ao longo do ano. ",
+                link: "https://www.tecmundo.com.br/voxel/502510-quanto-custa-assinar-o-game-pass-e-outros-servicos-de-jogos-no-brasil-confira-os-precos.htm",
+                cover: "CAPAS/SERVICOS_DE_STREAMING_DE_GAMES_PRECOS.jpg"
+            },
+            {
+                title: "(04/09/2025 - 11:59) Lançamento de Silksong causa instabilidade em diversas plataformas",
+                owner: "Viceplay",
+                date: "04/09/2025 - 11:59",
+                excerpt: "Na manhã desta quinta-feira (04/09), o aguardado lançamento de Hollow Knight: Silksong deixou a internet de pernas pro ar. Jogadores do mundo todo relataram dificuldades para acessar as principais plataformas digitais na tentativa de garantir sua cópia do game. E a mais atingida não poderia ser outra: a Steam, a plataforma favorita da galera.",
+                link: "https://viceplay.com.br/games/lancamento-colossal-de-silksong-causa-instabilidade-em-diversas-plataformas#:~:text=Na%20manh%C3%A3%20desta%20quinta%2Dfeira,a%20plataforma%20favorita%20da%20galera.",
+                cover: "CAPAS/silsong.jpg"
+            },
+            {
+                title: "(22/08/2025 - 17:00) Inacreditável: GTA 6 custou mais caro que essas 10 coisas",
+                owner: "Canaltech",
+                date: "22/08/2025 - 17:00",
+                excerpt: "O custo estimado para produzir GTA 6 nos últimos 12 anos é de aproximadamente US$ 2 bilhões, um valor absurdo e que demonstra o tamanho da aposta da Rockstar no seu próximo grande lançamento. Porém, é surpreendente o quanto o desenvolvimento de GTA 6 foi muito mais caro do que muita coisa histórica, chique e cheia de glamour. E nós do Canaltech listamos 10 coisas que custaram menos do que fazer o novo jogo da franquia.",
+                link: "https://canaltech.com.br/games/inacreditavel-gta-6-custou-mais-caro-que-essas-10-coisas/",
+                cover: "CAPAS/gta.jpg"
+            },
+            {
+                title: "(20/10/2025 - 15:27) Videogames na psicologia: Minecraft está sendo usado como instrumento na terapia voltada para crianças",
+                owner: "terra",
+                date: "20/10/2025 - 15:27",
+                excerpt: "A terapia Sandplay ou terapia do brincar vem sendo usado por psicólogos infantis desde o início do século XX. Brinquedos e areia são alguns dos recursos mais comuns, mas desde 2010 os videogames estão sendo cada vez mais integrados à psicologia infantil, sendo Minecraft um dos bons exemplos. Foi Oleksii Sukhorukov que pensou na ideia de usar o game da Mojang após ver seu filho jogar quando a guerra entre Ucrânia e Rússia começou em 2022. Foi aí que o então ex-psicólogo decidiu voltar para a área e utilizar o game como uma estratégia ao Play Therapy.",
+                link: "https://www.terra.com.br/byte/videogames-na-psicologia-minecraft-esta-sendo-usado-como-instrumento-na-terapia-voltada-para-criancas,58689d14eea4dcf3b862cef811bd8aaa5imx8dsl.html",
+                cover: "CAPAS/terapia.jpg"
+            },
+            {
+                title: "(19/10/2025 - 17:33) Arábia Saudita anuncia aquisição bilionária da Electronic Arts, maior editora de videogames do mundo",
+                owner: "Diário da Guanabara",
+                date: "19/10/2025 - 17:33",
+                excerpt: "O setor global de videogames acaba de ser palco de uma das maiores movimentações de sua história: a Electronic Arts (EA), reconhecida por franquias como FIFA, Battlefield, The Sims e Need for Speed, será adquirida por um consórcio liderado pelo fundo soberano saudita, o Public Investment Fund (PIF).",
+                link: "https://dgrj.com.br/tecnologia/arabia-saudita-anuncia-aquisicao-bilionaria-da-electronic-arts-maior-editora-de-videogames-do-mundo",
+                cover: "CAPAS/eagamescomprada.jpg"
+            },
+            {
+                title: "(13/12/2024 - 01:07) GOTY: Astrobot é o grande vencedor do prêmio de Jogo do Ano no The Game Awards 2024",
+                owner: "TechTudo",
+                date: "13/12/2024 - 01:07",
+                excerpt: "Após muitos anúncios e novidades, a cerimônia do The Game Awards chegou ao fim nesta quinta-feira (12) com o anúncio do maior prêmio da noite, o Jogo do Ano (GOTY). A disputa acirrada deste ano terminou com Astro Botcomo o grande premiado.",
+                link: "https://www.tecmundo.com.br/voxel/500252-goty-astrobot-e-o-grande-vencedor-do-premio-de-jogo-do-ano-no-the-game-awards-2024.htm",
+                cover: "CAPAS/goty.jpg"
+            }
+        ];
+
+        const container = document.getElementById('news-container');
+
+        news.forEach((item, index) => {
+            const card = document.createElement('div');
+            card.className = 'news-card';
+            card.innerHTML = `
+                <img src="${item.cover}" alt="${item.title}">
+                <h3>${item.title}</h3>
+            `;
+            card.onclick = () => openModal(index);
+            container.appendChild(card);
+        });
+
+        const modal = document.getElementById('newsModal');
+
+        function openModal(index) {
+            const item = news[index];
+            document.getElementById('modalTitle').textContent = item.title;
+            document.getElementById('modalOwner').textContent = item.owner;
+            document.getElementById('modalDate').textContent = item.date;
+            document.getElementById('modalExcerpt').textContent = item.excerpt;
+            document.getElementById('modalLink').href = item.link;
+            modal.style.display = 'flex';
+        }
+
+        function closeModal() {
+            modal.style.display = 'none';
+        }
+
+        window.onclick = function (event) {
+            if (event.target == modal) {
+                closeModal();
+            }
+        }
+
+        function buscarNoticia() {
+            const termo = document.getElementById("searchInput").value.toLowerCase().trim();
+            const container = document.getElementById("news-container");
+
+            // Limpa o container
+            container.innerHTML = "";
+
+            // Filtra as notícias
+            const noticiasFiltradas = news.filter(item => {
+                return (
+                    item.title.toLowerCase().includes(termo) ||
+                    item.excerpt.toLowerCase().includes(termo) ||
+                    item.owner.toLowerCase().includes(termo)
+                );
+            });
+
+            //if (noticiasFiltradas.length === 0) {
+            //    const msg = document.createElement("p");
+            //    msg.textContent = "Nenhuma notícia encontrada.";
+            //    msg.style.color = "#fff";
+            //    msg.style.textAlign = "center";
+            //    msg.style.margin = "20px 0";
+            //    container.appendChild(msg);
+            //    return;
+            //}
+
+            noticiasFiltradas.forEach((item, index) => {
+                const card = document.createElement('div');
+                card.className = 'news-card';
+                card.innerHTML = `
+                    <img src="${item.cover}" alt="${item.title}">
+                    <h3>${item.title}</h3>
+                `;
+                card.onclick = () => openModal(news.indexOf(item));
+                container.appendChild(card);
+            });
+        }
+    </script>
+
+
+</body>
+
+
+</html>
