@@ -1,4 +1,4 @@
-# SA-GameVault
+# SA-GameVault - https://sa-wikigames.vercel.app/index.html 
 Situação de Aprendizagem do curso de Desenvolvimento de Sistemas do SENAI. O projeto consiste em um portal interativo de informações sobre jogos, desenvolvido inteiramente em JavaScript, HTML e CSS. O objetivo é fornecer ao usuário uma experiência completa de consulta sobre o universo gamer.
 
 Informações detalhadas de cada jogo: história, modos de jogo, plataformas, preços por plataforma, desenvolvedores, estúdios envolvidos, microtransações, servidores online, histórico de atualizações, conquistas e comunidade.
